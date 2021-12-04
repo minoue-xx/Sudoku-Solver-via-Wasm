@@ -13,3 +13,13 @@ is recognized by a simple CNN. The solution of the sudoku is overlayed on the or
 and displayed on the web page.
 
 ![](./docs/demo_webcam_lowres.gif)
+
+# Implementation
+
+- MATLAB R2021b
+- Image Processing Toolbox
+- Deep Learning Toolbox
+- MATLAB Coder
+
+## Training CNN
+The details can be find here [model/trainCNN/trainCNNtoClassifyDigits.mlx](./model/trainCNN/trainCNNtoClassifyDigits.md)
