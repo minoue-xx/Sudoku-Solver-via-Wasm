@@ -1,8 +1,6 @@
 # Webcam Sudoku Solver 
 Copyright (c) 2021 Michio Inoue
 
-The license is available in the License file within this repository
-
 MATLAB's Sudoku solver is implemented as a form of WebAssembly, 
 through "Generate JavaScript Using MATLAB Coder" version 2.0.2 by Geoff McVittie. 
 The tool allows you to create JavaScript/WebAssembly libraries from MATLAB projects using MATLAB Coder.
@@ -15,5 +13,3 @@ is recognized by a simple CNN. The solution of the sudoku is overlayed on the or
 and displayed on the web page.
 
 ![](./docs/demo_webcam_lowres.gif)
-
-*The algorihm is still under development and it has some issues in identifing the digits*
