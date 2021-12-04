@@ -19,7 +19,8 @@ function getSolImage(data) {
 
     // Run Function
     //Module._identifyDigits_debug_initialize(); // took this out (need to call this once)
-    Module._identifyDigits_debug(Inputsbytes.byteOffset, Outputsbytes.byteOffset)
+    //Module._identifyDigits_debug(Inputsbytes.byteOffset, Outputsbytes.byteOffset)
+    Module._solveSudokuImage_codegen(Inputsbytes.byteOffset, Outputsbytes.byteOffset)
     //Module._identifyDigits_debug_terminate(); // no need to call anyways..
     // Copy Data from Heap 
     Outputs = _heapToArrayUint8(Outputsbytes, Outputs);

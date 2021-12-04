@@ -1,4 +1,5 @@
 # Traing a simple CNN for digit classification
+Copyright (c) 2021 Michio Inoue
 
 Please run `generateDigitsImage2Train.m` to generate typed digit images to train the network. 
 
