@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webcam Sudoku Solver</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <style>
+        @import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+        html,
+        body {
+            font-size: 16px;
+            font-family: 'Noto Sans Japanese', sans-serif;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px #333 solid;
+            max-width: 70%;
+            height: auto;
+        }
+
+        video {
+            border: 1px #333 solid;
+            max-width: 70%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Sudoku Solver from Web Camera (Powered by MATLAB)</h1>
+    </header>
+    <span>
+
+
+        <a href="./index_mobile.html">数独画像を読み込む場合はこちらから</a>
+        <figure>
+            <video id="video1"></video>
+            <figcaption>Web カメラ</figcaption>
+        </figure>
+        <figure>
+            <canvas id="canvas1">Canvasに対応しているブラウザを使用して下さい。</canvas>
+            <figcaption>処理後</figcaption>
+        </figure>
+    </span>
+
+    <script async type="text/javascript" src="js/identifyDigits_debug.js"></script>
+    <script async type="text/javascript" src="js/getSolutionImage.js"></script>
+    <script>
+
+        // Ref: https://kuroeveryday.blogspot.com/2017/10/image-filters-with-canvas-algorithm.html
+        // Ref: https://kuroeveryday.blogspot.com/2019/01/real-time-video-filter-with-canvas.html
+        async function main() {
+            // 表示用のCanvas1
+            const canvas1 = document.getElementById("canvas1");
+            const ctx1 = canvas1.getContext("2d");
+            // 画像処理用のオフスクリーンCanvas
+            const offscreen = document.createElement("canvas");
+            const offscreenCtx = offscreen.getContext("2d");
+            // カメラから映像を取得するためのvideo要素
+            const video = document.getElementById("video1")
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: true
+            });
+
+            video.srcObject = await stream;
+            // streamの読み込み完了
+            video.onloadedmetadata = () => {
+                video.play();
+
+                offscreen.width = 750;
+                offscreen.height = 750;
+                canvas1.width = video.videoWidth;
+                canvas1.height = video.videoHeight;
+
+
+                Module._identifyDigits_debug_initialize();
+                tick();
+            };
+
+            // 1フレームごとに呼び出される処理
+            function tick() {
+                // カメラの映像をCanvasに描画
+                offscreenCtx.drawImage(video, 0, 0, offscreen.width, offscreen.height);
+
+                // イメージデータを取得 [r,g,b,a,r,g,b,a,...]
+                const imageData = offscreenCtx.getImageData(0, 0, offscreen.width, offscreen.height);
+
+                //filter(imageData.data); // test use
+                getSolImage(imageData.data);
+
+                // オフスクリーンCanvasを更新
+                offscreenCtx.putImageData(imageData, 0, 0, 0, 0, offscreen.width, offscreen.height);
+
+
+                var scale = 1; // 縦横を変更する場合
+                var dstWidth = video.videoWidth * scale;
+                var dstHeight = video.videoHeight * scale
+
+                ctx1.drawImage(offscreen, 0, 0, offscreen.width, offscreen.height, 0, 0, dstWidth, dstHeight);
+
+                // 次フレームを処理
+                window.requestAnimationFrame(tick);
+            }
+
+            function filter(data) {
+                // 画像処理を行う
+                const threshold = 255 / 2;
+
+                const getColor = (data, i) => {
+                    // threshold < rgbの平均
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    if (threshold < avg) {
+                        // white
+                        return 255;
+                    } else {
+                        // black
+                        return 0;
+                    }
+                };
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const color = getColor(data, i);
+                    data[i] = data[i + 1] = data[i + 2] = color;
+                }
+            }
+
+        }
+
+        main();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webcam Sudoku Solver</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <style>
+        @import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+        html,
+        body {
+            font-size: 16px;
+            font-family: 'Noto Sans Japanese', sans-serif;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px #333 solid;
+            max-width: 70%;
+            height: auto;
+        }
+
+        video {
+            border: 1px #333 solid;
+            max-width: 70%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Sudoku Solver from Image (Powered by MATLAB)</h1>
+    </header>
+    <span>
+
+        <p><input type="file" accept="image/*" capture="camera" id="selectfile"></p>
+
+        <a href="./index.html">ライブカメラから読み込む場合はこちらから（PC Only）</a>
+
+        <figure>
+            <canvas id="canvas1">Canvasに対応しているブラウザを使用して下さい。</canvas>
+            <figcaption>処理後</figcaption>
+        </figure>
+    </span>
+
+    <script async type="text/javascript" src="js/identifyDigits_debug.js"></script>
+    <script async type="text/javascript" src="js/getSolutionImage.js"></script>
+
+    <script>
+
+        async function main() {
+            // 表示用のCanvas1
+            const canvas1 = document.getElementById("canvas1");
+            const ctx1 = canvas1.getContext("2d");
+
+            canvas1.width = 750;
+            canvas1.height = 750;
+
+            // 画像処理用のオフスクリーンCanvas
+            const offscreen = document.createElement("canvas");
+            const offscreenCtx = offscreen.getContext("2d");
+
+            //ファイルオープンの際のイベント
+            var ofd = document.getElementById("selectfile");
+            ofd.addEventListener("change", function (evt) {
+                //ここに画像データを入力
+                var img = null;
+
+                var file = evt.target.files;
+                var reader = new FileReader();
+
+                //dataURL形式でファイルを読み込む
+                reader.readAsDataURL(file[0]);
+
+                //ファイルの読込が終了した時の処理
+                reader.onload = function () {
+                    img = new Image();
+                    img.onload = function () {
+                        /*読み込み終了後ここで画像を加工して表示する*/
+                        //キャンバスに画像をセット
+                        offscreen.width = 750;
+                        offscreen.height = 750;
+                        offscreenCtx.drawImage(img, 0, 0, offscreen.width, offscreen.height);
+
+                        // イメージデータを取得 [r,g,b,a,r,g,b,a,...]
+                        const imageData = offscreenCtx.getImageData(0, 0, offscreen.width, offscreen.height);
+
+                        getSolImage(imageData.data);
+
+                        // オフスクリーンCanvasを更新
+                        offscreenCtx.putImageData(imageData, 0, 0, 0, 0, offscreen.width, offscreen.height);
+
+                        // 表示用Canvasに描画
+                        ctx1.drawImage(offscreen, 0, 0, offscreen.width, offscreen.height, 0, 0, offscreen.width, offscreen.width);
+
+                    }
+                    //読み込んだ画像ソースを入れる
+                    img.src = reader.result;
+                }
+            }, false);
+
+        }
+
+        main();
+
+    </script>
+
+
+</body>
+
+</html>
