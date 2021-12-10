@@ -1,8 +1,13 @@
 % Copyright (c) 2021 Michio Inoue
 % A function generates an image with a solution overlayed to the original
 % input image
-function I = solution2image_codegen(M,Msol)%#codegen
+function I = solution2image_codegen(M,Msol) %#codegen
+% M: Sudoku puzzle (9x9)
+% M_sol: Solution of the puzzle (9x9)
+% I: Image of solution (digits are placed where the puzzle does not have
+% digits)
 
+% A image of each digits are pre-saved to mat file.
 digits = coder.load('digitsSet.mat','digits');
 I = true(180);
 

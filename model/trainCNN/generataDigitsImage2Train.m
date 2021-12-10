@@ -19,7 +19,14 @@ h_fig = figure(1);
 % set(1,'visible','off');
 % Set the size of the figure (to fix aspect ratio)
 h_fig.Units = 'pixels';
+
 h_fig.Position = [100,100,120,120];
+% Note: The Windows operating system enforces a minimum window width and 
+% a maximum window size if we specify the figure size outsize the limits 
+% the figure will conform to the limits insisted by the operation system . 
+% This is documented here:
+% https://www.mathworks.com/help/matlab/ref/matlab.ui.figure-properties.html
+
 
 % Set the size of axes to fit to figure
 h_axes = gca;

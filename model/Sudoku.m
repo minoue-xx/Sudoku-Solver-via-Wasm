@@ -3,7 +3,7 @@
 % https://jp.mathworks.com/company/newsletters/articles/solving-sudoku-with-matlab.html
 % Modified a few lines to C-code gen by MATLAB Coder
 
-function X = Sudoku(X)
+function X = Sudoku(X) %#codegen
 % SUDOKU  Solve Sudoku using recursive backtracking.
 %   sudoku(X), expects a 9-by-9 array X.
 % Fill in all “singletons”.
@@ -46,11 +46,13 @@ end
                     z(nonzeros(X(:,j))) = 0;
                     z(nonzeros(X(tri(i),tri(j)))) = 0;
                     C{i,j} = nonzeros(z)';
-                    L(i,j) = length(nonzeros(z)');
+                    L(i,j) = length(nonzeros(z)'); % (^1)
                 end
             end
         end
         %  L = cellfun(@length,C);   % Number of candidates.
+        % Since cellfun is not supported for C-code generation it's moved
+        % within the for loop above. (^1)
         s = find(X==0 & L==1,1);
         e = find(X==0 & L==0,1);
 
