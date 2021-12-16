@@ -9,7 +9,7 @@ GitHub Pages で動く数独ソルバーを作ってみました。
 
 端末側ですべての処理は行われて撮った画像がどこかに送られることはないのでご安心ください（ソース：[GitHub: Sudoku Solver via Wasm](https://github.com/minoue-xx/Sudoku-Solver-via-Wasm)）
 
-![image_0.png](doc_jp_images/image_0.png)
+![image_0.png](JP_SudokuSolverOverview_images/image_0.png)
 
 ## この doc には何が書かれているのか
 
@@ -106,7 +106,7 @@ figure
 imshow(Icam)
 ```
 
-![figure_0.png](doc_jp_images/figure_0.png)
+![figure_0.png](JP_SudokuSolverOverview_images/figure_0.png)
 
 ```matlab:Code
 Igray = rgb2gray(Icam);
@@ -131,7 +131,7 @@ figure
 montage({tmp,Ibw},BackgroundColor='white',BorderSize=[10,10])
 ```
 
-![figure_1.png](doc_jp_images/figure_1.png)
+![figure_1.png](JP_SudokuSolverOverview_images/figure_1.png)
 
 ## 数独の認識
 
@@ -195,7 +195,7 @@ hold on
 plot(pts(:,1),pts(:,2),'m','linewidth',3);
 ```
 
-![figure_2.png](doc_jp_images/figure_2.png)
+![figure_2.png](JP_SudokuSolverOverview_images/figure_2.png)
 
 ## 幾何学変換
 
@@ -230,13 +230,13 @@ figure
 montage({Ibw,Ibw_warp},BackgroundColor='white',BorderSize=[10,10])
 ```
 
-![figure_3.png](doc_jp_images/figure_3.png)
+![figure_3.png](JP_SudokuSolverOverview_images/figure_3.png)
 
 ## 再度大きい枠（数独）の探索＋中の数字を抽出
 
 変換後の画像内の四隅のピクセル位置を同じ処理で見つけ、今度はその枠を 9x9 に等分します。
 
-![image_1.png](doc_jp_images/image_1.png)
+![image_1.png](JP_SudokuSolverOverview_images/image_1.png)
 
 ```matlab:Code
 R = regionprops(Ibw_warp,'Area','BoundingBox','PixelList');
@@ -289,7 +289,7 @@ for jj=2:length(yy)-1
 end
 ```
 
-![figure_4.png](doc_jp_images/figure_4.png)
+![figure_4.png](JP_SudokuSolverOverview_images/figure_4.png)
 
 ## 数字の認識前のエラー処理
 
@@ -334,7 +334,7 @@ out = double(predict(mynet,XX));
 
 中身はこんな感じです。入力は 56x56 の画像でコード生成仕様になっています。
 
-![image_2.png](doc_jp_images/image_2.png)
+![image_2.png](JP_SudokuSolverOverview_images/image_2.png)
 
 ここでコケると数独が解けません。なのでここでは認識精度が上がるよう以下の 2 点工夫しました。
 
@@ -424,7 +424,7 @@ figure
 montage(data,ThumbnailSize=[40,40])
 ```
 
-![figure_5.png](doc_jp_images/figure_5.png)
+![figure_5.png](JP_SudokuSolverOverview_images/figure_5.png)
 
 ちゃんと認識できていますね。
 
@@ -507,7 +507,7 @@ figure
 imshow(I)
 ```
 
-![figure_6.png](doc_jp_images/figure_6.png)
+![figure_6.png](JP_SudokuSolverOverview_images/figure_6.png)
 
 こんな感じ。そして画像にあった数独のサイズに [`imresize`](https://jp.mathworks.com/help/images/ref/imresize.html) で大きさを合わせて、、該当部分の色を変えるように処理します。
 
@@ -523,7 +523,7 @@ figure
 montage({tmp,Imask})
 ```
 
-![figure_7.png](doc_jp_images/figure_7.png)
+![figure_7.png](JP_SudokuSolverOverview_images/figure_7.png)
 
 これで出来上がり！本当は幾何学変換後の画像ではなく元々の画像に答えを映したいところですが、幾何学変換の逆変換が C コード生成対象外なので手抜きしました。
 
